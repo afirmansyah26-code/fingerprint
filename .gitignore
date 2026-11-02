@@ -1,0 +1,13 @@
+/Att/
+**/bin/
+**/obj/
+.vs/
+*.mdb
+*.sqlite3
+*.db
+*.log
+*.log.txt
+*.exe
+*.dll
+*.sys
+*.cat

@@ -1,0 +1,63 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{4577F5ED-B9BA-465C-9710-B3A17612CA3A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>FingerprintAttendance</RootNamespace>
+    <AssemblyName>FingerprintAttendance</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <FileAlignment>512</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>5</LangVersion>
+    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>bin\x86\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Microsoft.VisualBasic" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Data\AppDatabase.cs" />
+    <Compile Include="Domain\Employee.cs" />
+    <Compile Include="Domain\Machine.cs" />
+    <Compile Include="Domain\AttendanceRecord.cs" />
+    <Compile Include="Device\DeviceConnectionProbe.cs" />
+    <Compile Include="Device\DeviceDataReader.cs" />
+    <Compile Include="UI\Theme.cs" />
+    <Compile Include="UI\PageBase.cs" />
+    <Compile Include="UI\MainForm.cs" />
+    <Compile Include="UI\CommonPages.cs" />
+    <Compile Include="UI\MachineProbeActions.cs" />
+    <Compile Include="UI\MachineDownloadActions.cs" />
+    <Compile Include="UI\DataPages.cs" />
+    <Compile Include="UI\Dialogs.cs" />
+    <Compile Include="Import\EmployeeCsvImporter.cs" />
+    <Compile Include="Import\ImportPage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.manifest" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
+
+
