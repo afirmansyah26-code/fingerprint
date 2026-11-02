@@ -69,3 +69,9 @@
 - Hasil ini memverifikasi jalur koneksi dan baca record pada mesin yang diuji. Pembacaan pengguna, sinkronisasi, operasi tulis/hapus, dan kompatibilitas dengan mesin lain belum terverifikasi.
 - Tidak ada perintah `ClearGLog`; log pada mesin tidak dihapus.
 - Alamat LAN, nama konfigurasi lokal, dan nomor seri tidak disalin ke dokumentasi publik.
+
+## 2026-11-02 — Inventaris awal fitur Att
+
+- Mencatat menu utama, toolbar, panel navigasi, dan kolom halaman mesin dari screenshot yang diberikan pengguna.
+- Menandai label yang terpotong dan perilaku tombol sebagai belum diverifikasi.
+- Tidak menekan tombol koneksi atau operasi mesin.
