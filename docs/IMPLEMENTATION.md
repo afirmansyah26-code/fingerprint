@@ -2,7 +2,7 @@
 
 ## Status saat ini
 
-Fondasi aplikasi dan probe koneksi SDK sudah dibuat serta berhasil dikompilasi sebagai executable x86. Probe belum dijalankan pada mesin GU-06; aplikasi belum siap untuk operasi absensi produksi.
+Fondasi aplikasi, probe koneksi SDK, dan unduh record sudah dibuat serta berhasil dikompilasi sebagai executable x86. Pada 2 November 2026 pengguna mengonfirmasi aplikasi terhubung ke mesin ICON GU-06 melalui LAN dan berhasil mengunduh record absensi. Layar menampilkan lebih dari 1.000 record, dengan 1.000 record terbaru pada daftar. Aplikasi belum siap untuk operasi produksi karena pemetaan karyawan, aturan kerja, laporan, impor Att, dan installer belum selesai.
 
 ## Yang sudah tersedia
 
@@ -11,7 +11,7 @@ Fondasi aplikasi dan probe koneksi SDK sudah dibuat serta berhasil dikompilasi s
 - CRUD karyawan lokal: tambah, edit, nonaktifkan/aktifkan, dan hapus.
 - Hapus karyawan memperingatkan bahwa riwayat absensi/koreksi lokal ikut terhapus. Operasi ini tidak memanggil SDK dan tidak mengubah pengguna, sidik jari, atau record di mesin.
 - Pendaftaran beberapa konfigurasi mesin pada satu komputer. Menambah, mengedit, dan menghapus di halaman ini hanya mengubah konfigurasi lokal.
-- Unduh raw record absensi melalui SDK, penyimpanan lokal transaksional dengan deduplikasi, dan daftar hingga 1.000 record terbaru. User ID mesin belum dipetakan ke master karyawan; alur belum diuji pada perangkat.
+- Unduh raw record absensi melalui SDK, penyimpanan lokal transaksional dengan deduplikasi, dan daftar hingga 1.000 record terbaru. Pengguna mengonfirmasi unduh record berhasil pada ICON GU-06. User ID mesin belum dipetakan ke master karyawan.
 - Uji koneksi SDK untuk mesin terpilih, termasuk pembacaan nomor seri/firmware; nomor seri tersimpan pada konfigurasi lokal setelah pembacaan berhasil.
 - Template CSV karyawan UTF-8 dengan pemisah titik koma, ekspor, baca, validasi kode ganda, pratinjau, dan impor transaksional. Template dapat dibuka di Excel.
 - Schema awal untuk karyawan, mesin, pemetaan user per mesin, raw log, koreksi lokal, dan shift.
@@ -85,21 +85,21 @@ Build terbaru berhasil ke src\FingerprintAttendance\bin\x86\ReviewAttendanceRead
 
 - Halaman Mesin fingerprint menyediakan tombol **Uji koneksi** untuk mesin aktif yang dipilih. Operasi berjalan di latar belakang agar layar tetap responsif.
 - Probe memakai COM zkemkeeper.ZKEM.1, memanggil Connect_Net(host, port), lalu mencoba membaca nomor seri dan versi firmware melalui GetSerialNumber serta GetFirmwareVersion. Koneksi dilepas melalui Disconnect.
-- Probe tidak membaca pengguna, templat, atau record absensi, dan tidak mengirim perubahan ke mesin. Belum ada koneksi yang dijalankan terhadap ICON GU-06 dalam sesi implementasi ini. Nomor seri yang berhasil dibaca disimpan lokal; status koneksi hanya berlaku selama halaman mesin terbuka.
+- Probe tidak membaca pengguna, templat, atau record absensi, dan tidak mengirim perubahan ke mesin. Pada 2 November 2026 pengguna mengonfirmasi ICON GU-06 berhasil terhubung melalui LAN; layar aplikasi menunjukkan status **Terhubung**. Nomor seri yang berhasil dibaca disimpan lokal; status koneksi hanya berlaku selama halaman mesin terbuka. Detail alamat LAN, nama konfigurasi lokal, dan nomor seri tidak dicantumkan pada dokumentasi publik.
 - Probe memerlukan registrasi SDK COM 32-bit di komputer. Installer dan hak redistribusi SDK belum ditetapkan.
 
 ### Bukti TypeLib lokal
 
 TypeLib dari C:\Windows\SysWOW64\zkemkeeper.dll diperiksa tanpa membuat instance perangkat atau menjalankan metode SDK. Signature yang relevan:
 
-- Connect_Net(BSTR IPAdd, I4 Port) -> VARIANT_BOOL. Adapter memakai nomor mesin SDK 1 untuk membaca identitas; angka ini mengikuti konvensi penggunaan SDK dan belum divalidasi pada GU-06.
+- Connect_Net(BSTR IPAdd, I4 Port) -> VARIANT_BOOL. Nomor mesin SDK 1 telah berfungsi untuk koneksi dan unduh record pada GU-06 yang diuji; pemakaian pada perangkat lain belum divalidasi.
 - GetSerialNumber(I4 dwMachineNumber, out BSTR dwSerialNumber) -> VARIANT_BOOL.
 - GetFirmwareVersion(I4 dwMachineNumber, out BSTR strVersion) -> VARIANT_BOOL.
 - SSR_GetAllUserInfo(I4 dwMachineNumber, out BSTR dwEnrollNumber, out BSTR Name, out BSTR Password, out I4 Privilege, out VARIANT_BOOL Enabled) -> VARIANT_BOOL.
 - SSR_GetGeneralLogData menyediakan ID pengguna, metode verifikasi, mode in/out, waktu, dan kode kerja melalui parameter output.
 - ClearGLog(I4 dwMachineNumber) terdaftar, tetapi tidak pernah dipanggil aplikasi.
 
-TypeLib menjelaskan deklarasi API, bukan jaminan kompatibilitas dengan firmware GU-06. Alur baca record sudah dibuat tetapi belum diuji pada perangkat. Pembacaan pengguna dan semua operasi tulis masih perlu diimplementasikan serta diuji secara terkontrol.
+TypeLib menjelaskan deklarasi API, bukan jaminan kompatibilitas dengan semua firmware. Alur koneksi dan baca record sudah dikonfirmasi berhasil pada ICON GU-06. Nomor mesin SDK 1 berfungsi pada pengujian ini, tetapi belum boleh diasumsikan berlaku untuk semua perangkat. Pembacaan pengguna dan semua operasi tulis masih perlu diimplementasikan serta diuji secara terkontrol.
 
 ## Unduh record absensi
 
@@ -108,7 +108,7 @@ TypeLib menjelaskan deklarasi API, bukan jaminan kompatibilitas dengan firmware 
 - Unduhan ulang mengabaikan duplikat dengan kunci mesin, User ID, waktu, dan metode verifikasi. Log asli mesin tidak dihapus atau diubah.
 - Halaman Record absensi menampilkan hingga 1.000 record terbaru; filter tanggal/mesin dan pencocokan identitas karyawan belum tersedia.
 - Schema menambahkan kolom mode absensi serta kode kerja. Inisialisasi menambahkan kolom tersebut ke database SQLite lokal lama bila belum ada.
-- Alur baca ini sudah dikompilasi, tetapi belum dijalankan pada ICON GU-06. Semantik detail mode verifikasi dan mode absensi perlu dicocokkan dengan firmware perangkat.
+- Pengguna mengonfirmasi alur unduh berhasil pada ICON GU-06; layar menampilkan total lebih dari 1.000 record dan daftar 1.000 record terbaru. Pengujian ini hanya mengonfirmasi jalur baca pada perangkat tersebut. Semantik detail mode verifikasi dan mode absensi tetap perlu dicocokkan dengan firmware perangkat.
 ## Repositori GitHub
 
 - Remote origin: https://github.com/afirmansyah26-code/fingerprint.git

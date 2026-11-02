@@ -1,7 +1,7 @@
 # Rencana Aplikasi Absensi Fingerprint
 
-**Status:** jalur baca record dan probe koneksi sudah diimplementasikan; belum diuji pada mesin.  
-**Versi dokumen:** 1.2  
+**Status:** koneksi dan unduh record sudah dikonfirmasi berhasil pada mesin ICON GU-06 melalui LAN; jalur tulis dan fitur lain masih dalam pengerjaan.  
+**Versi dokumen:** 1.3  
 **Bahasa dokumen:** Indonesia
 
 ## Tujuan
@@ -123,6 +123,8 @@ Dari foto informasi perangkat yang diberikan pengguna:
 - Platform: ZLM60_TFT.
 - Algoritma sidik jari: Finger VX10.0.
 - Penggunaan saat ini melalui LAN; port 4370 untuk Att menurut pengguna.
+- Pada 2 November 2026 pengguna mengonfirmasi aplikasi terhubung ke mesin melalui LAN dan berhasil mengunduh record. Layar menunjukkan lebih dari 1.000 record tersedia, dengan 1.000 record terbaru ditampilkan.
+- Detail alamat IP, nama konfigurasi lokal, dan nomor seri tidak disalin ke dokumentasi publik.
 
 Perangkat OEM dan firmware dapat membatasi perilaku SDK. Model serta informasi layar belum membuktikan dukungan setiap operasi.
 
@@ -133,8 +135,8 @@ Perangkat OEM dan firmware dapat membatasi perilaku SDK. Model serta informasi l
 - Folder `Att` sendiri tidak berisi SDK COM tersebut.
 - Daftar API yang diperiksa mencakup koneksi jaringan, pembacaan log umum, pembacaan pengguna, penulisan informasi pengguna, dan operasi penghapusan pengguna/templat.
 - `ClearGLog` hanya menerima nomor mesin pada signature yang diperiksa; ini mendukung kesimpulan bahwa operasinya bersifat keseluruhan mesin. Tidak ada API selektif untuk edit/hapus record individual yang berhasil dipastikan dari pemeriksaan tersebut.
-- Pemeriksaan daftar API bukan pengujian terhadap mesin. Probe koneksi aplikasi kini memanggil Connect_Net, GetSerialNumber, GetFirmwareVersion, dan Disconnect atas tindakan pengguna; belum dijalankan terhadap GU-06. Hasil operasi write/delete harus diverifikasi dengan aman sebelum fitur dirilis.
-- TypeLib lokal menyatakan Connect_Net(BSTR, I4) -> VARIANT_BOOL; nomor seri dan firmware memakai parameter output BSTR. SSR_GetAllUserInfo tercatat, tetapi pembacaan pengguna belum diaktifkan. SSR_GetGeneralLogData digunakan untuk unduh record, tetapi belum diuji pada GU-06. Adapter memakai nomor mesin SDK 1 berdasarkan konvensi penggunaan SDK.
+- Pemeriksaan daftar API saja bukan pengujian terhadap mesin. Pengguna telah mengonfirmasi probe koneksi dan unduh record berhasil pada ICON GU-06. Hasil operasi write/delete belum diuji dan harus diverifikasi dengan aman sebelum fitur dirilis.
+- TypeLib lokal menyatakan Connect_Net(BSTR, I4) -> VARIANT_BOOL; nomor seri dan firmware memakai parameter output BSTR. SSR_GetAllUserInfo tercatat, tetapi pembacaan pengguna belum diaktifkan. SSR_GetGeneralLogData sudah digunakan untuk unduh record pada GU-06. Nomor mesin SDK 1 berfungsi pada pengujian tersebut; kompatibilitas dengan mesin lain belum dikonfirmasi.
 
 Lokasi SDK yang ditemukan pada mesin pengembangan:
 
@@ -168,7 +170,7 @@ Lokasi dan versi SDK harus diperiksa ulang pada mesin build/instalasi. Jangan me
 ## Rencana kerja bertahap
 
 1. **Spesifikasi:** finalisasi field karyawan, aturan perhitungan absensi, laporan yang dipakai, serta format template impor.
-2. **Verifikasi kompatibilitas:** dokumentasikan API yang tersedia, kebutuhan x86/COM, dependensi SDK, dan perilaku perangkat untuk koneksi, pembacaan, serta penulisan yang disetujui.
+2. **Verifikasi kompatibilitas:** koneksi dan baca record sudah diverifikasi pada ICON GU-06; lanjutkan verifikasi API tulis yang disetujui, pembacaan pengguna, dependensi SDK, serta pemasangan bersih Windows 10+.
 3. **Rancangan data:** master karyawan, pemetaan per mesin, mesin, raw attendance log, shift/kalender, koreksi, dan hasil rekap.
 4. **Rancangan alur impor:** Att MDB read-only dan template Excel, dengan pratinjau, validasi, dan laporan kesalahan.
 5. **Rancangan sinkronisasi:** bandingkan data per mesin, tunjukkan konflik, lalu kirim perubahan eksplisit tanpa penghapusan otomatis.

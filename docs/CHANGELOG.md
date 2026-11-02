@@ -61,3 +61,11 @@
 - Menginisialisasi repository lokal pada branch main dan menghubungkan remote origin ke repositori pengguna.
 - Menyiapkan .gitignore agar Att/, database/log lokal, binari SDK lama, dan output build tidak ikut terlacak.
 - Source dan dokumentasi proyek disiapkan untuk commit awal.
+
+## 2026-11-02 — Verifikasi perangkat dan unduh record
+
+- Pengguna mengonfirmasi aplikasi berhasil terhubung melalui LAN ke mesin ICON GU-06.
+- Pengguna mengonfirmasi record absensi berhasil diunduh; layar aplikasi menunjukkan lebih dari 1.000 record dan menampilkan 1.000 record terbaru.
+- Hasil ini memverifikasi jalur koneksi dan baca record pada mesin yang diuji. Pembacaan pengguna, sinkronisasi, operasi tulis/hapus, dan kompatibilitas dengan mesin lain belum terverifikasi.
+- Tidak ada perintah `ClearGLog`; log pada mesin tidak dihapus.
+- Alamat LAN, nama konfigurasi lokal, dan nomor seri tidak disalin ke dokumentasi publik.
